@@ -61,18 +61,25 @@
       (rowso [[1 2] [5 6] [8 15] [6 1]] q))
 
 
+
 (run* [q]
       (fresh [r c]
              (rowo [5 11] r)
              (columno [56 19] c)
              (== q [r c])))
 
-(run 1 [q]
-     (everyg (fn [queen]
-               (fresh [r c]
-                      (== [r c] queen)
-                      (fd/in r domain)
-                      (fd/in c domain))) queens)
-     (fd/distinct queens)
-     (== q queens))
+; OK, ahora a ver si consigo usar el fd/distinct. No puedo porque rows
+; no está en un dominio finito, pero puedo usar distincto (menos
+; eficiente, eso sí)
 
+
+(run 1 [q]
+     (fresh [rows cols]
+            (everyg (fn [queen]
+                      (fresh [r c]
+                             (== [r c] queen)
+                             (fd/in r domain)
+                             (fd/in c domain))) queens)
+            (rowso queens rows)
+            (distincto rows))
+     (== q queens))
