@@ -20,17 +20,12 @@
    (alldistincto tail)))
 
 
-
 (run* [q]
       (alldistincto [1 2 673 3])
       (== q 1))
 
-; Voy a intentar crear dos variables y enlazarlas a ver si lo consigo
-(def rows (repeatedly 8 lvar))
-(def columns (repeatedly 8 lvar))
 
 (def queens (repeatedly 8 lvar))
-
 (def domain (fd/domain 1 2 3 4 5 6 7 8))
 
 (run 4 [q]
@@ -38,7 +33,7 @@
      (everyg #(fd/in % domain) rows)
      (everyg #(fd/in % domain) columns))
 
-(run 4 [q]
+(run 1 [q]
      (== q [queens])
      (everyg (fn [queen]
                (fresh [r c]
