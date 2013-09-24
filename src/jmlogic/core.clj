@@ -24,6 +24,14 @@
       (alldistincto [1 2 673 3])
       (== q 1))
 
+; Esto funciona y unifica sobre la misma lista
+(defne idento
+  [xs ys]
+  ([() ()])
+  ([[h1 . t1] [h2 . t2]]
+     (== h1 h2)
+     (idento t1 t2)))
+
 
 (def queens (repeatedly 8 lvar))
 (def domain (fd/domain 1 2 3 4 5 6 7 8))
@@ -38,27 +46,20 @@
   [queen c]
   ([[_ ?col] ?col]))
 
+
 (defne rowso
-  "unifica todas las filas"
+  "unifica un vector de posiciones, expresadas como vectores [row column] con el vector formado por sus filas"
   [queens rows]
-  ([() _])
-  ([[head . tail] rs]
-     (fresh [row-head acc-rows]
-            (rowo head row-head)
-            (conso row-head rs acc-rows)
-            (rowso tail acc-rows))))
-
-; Esto funciona y unifica sobre la misma lista
-(defne idento
-  [xs ys]
+  ; Si no hay ninguna reina, no hay ninguna fila
   ([() ()])
-  ([[h1 . t1] [h2 . t2]]
-     (== h1 h2)
-     (idento t1 t2)))
-
+  ; Si hay cosas, tomamos la fila de la primera y la concatenamos con
+  ; las filas del resto
+  ([[[?r _] . tail] [?r . ?rs]]
+     (rowso tail ?rs)))
 
 (run* [q]
       (rowso [[1 2] [5 6] [8 15] [6 1]] q))
+
 
 (run* [q]
       (fresh [r c]
