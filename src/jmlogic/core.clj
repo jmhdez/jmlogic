@@ -26,17 +26,29 @@
   [queens diags]
   ([() ()])
   ([[[?r ?c] . tail] [?d1 . ?ds]]
-     (project [?r ?c ?d1]
-              (== (- ?r ?c) ?d1))
-     (diags1o tail ?ds)))
+     (diags1o tail ?ds)
+     (diag1o [?r ?c] ?d1)))
 
 (defne diag1o [queen diag]
   ([[r c] d]
      (project [r c d]
               (== (- r c) d))))
 
+; Esto no funciona 
 (run 1 [q]
-     (diag1o [1 5] q))
+     (fresh [x y]
+            (diags1o [[1 5] [x y]] q)
+            (== x 1)
+            (== y 54)))
+
+;... pero esto sí
+(run 1 [q]
+     (fresh [x y]
+            (== x 1)
+            (== y 54)
+            (diags1o [[1 5] [x y]] q)))
+
+
 
 (run 1 [q]
      (fresh [rows cols diags1 diags2]
@@ -45,10 +57,11 @@
                              (== [r c] queen)
                              (fd/in r domain)
                              (fd/in c domain))) queens)
-            (rowso queens rows)
-            (distincto rows)
-            (colso queens cols)
-            (distincto cols)
+            ;(rowso queens rows)
+            ;(distincto rows)
+            ;(colso queens cols)
+            ;(distincto cols)
             (diags1o queens diags1)
-            (distincto diags1))
+            ;(distincto diags1)
+            )
      (== q queens))
